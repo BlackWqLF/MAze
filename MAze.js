@@ -78,7 +78,7 @@ document.addEventListener("keydown", keys);
 function keys(e) {
 	let code = e.code;
 	switch (code) {
-		
+
 		case "ArrowUp":
 			up();
 			break;
@@ -91,7 +91,7 @@ function keys(e) {
 		case "ArrowRight":
 			right();
 			break;
-		
+
 		case "KeyW":
 			up();
 			break;
@@ -180,7 +180,7 @@ function checkXboundry(dir) {
 		}
 		ok.push(check);
 	}
-	
+
 	let res = ok.every(function (e) {
 		return e > 0;
 	});
@@ -223,9 +223,9 @@ function checkYboundry(dir) {
 function genSides() {
 	let max = mazeHeight / step;
 	let l1 = Math.floor(Math.random() * max) * step;
-	
+
 	let l2 = mazeHeight - step - l1;
-	
+
 
 	let lb1 = document.createElement("div");
 	lb1.style.top = step + "px";
@@ -247,7 +247,7 @@ function genSides() {
 	rb2.style.left = mazeWidth + step + "px";
 	rb2.style.height = l1 + "px";
 
-	
+
 	nogoX.push(0, mazeWidth + 2 * step, 0, 0, mazeWidth + step, mazeWidth + step);
 	nogoX2.push(
 		0 + bwidth,
@@ -273,14 +273,14 @@ function genSides() {
 		l2 + step + bwidth,
 		l2 + 2 * step + bwidth
 	);
-	
+
 	thingie.style.top = l1 + step + "px";
 	thingie.style.left = 0 + "px";
-	
+
 	home.style.top = l2 + step + "px";
 	home.style.left = mazeWidth + step + "px";
 
-	
+
 	let els = [lb1, lb2, rb1, rb2];
 	for (let i = 0; i < els.length; i++) {
 		confSideEl(els[i]);
@@ -295,7 +295,7 @@ function confSideEl(el) {
 
 
 function genMaze(cx, cy, s) {
-	
+
 	let d = limShuffle(dirs, s);
 
 	for (let i = 0; i < d.length; i++) {
@@ -306,7 +306,7 @@ function genMaze(cx, cy, s) {
 		if (nx >= 0 && nx < mx && ny >= 0 && ny < my && grid[ny][nx].v === 0) {
 			grid[cy][cx][d[i]] = 1;
 			grid[ny][nx][modDir[d[i]].o] = 1;
-			
+
 			genMaze(nx, ny, i);
 		}
 	}
@@ -357,7 +357,7 @@ function limShuffle(array, s) {
 
 	for (let i = ran.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		
+
 		[ran[i], ran[j]] = [ran[j], ran[i]];
 	}
 	let comb = con.concat(ran);
@@ -390,7 +390,7 @@ function animKeys(key) {
 		key.style.transform = "translateX(2px)";
 	}
 
-	
+
 	setTimeout(() => {
 		key.style.border = "2px #fff solid";
 		key.style.borderTop = "2px #fff solid";
@@ -405,7 +405,7 @@ function animKeys(key) {
 let maxl = 0;
 let prevl = 0;
 function updateEmo(lr) {
-	
+
 	if (lr) {
 		if (thingie.offsetLeft < maxl) {
 			emo.innerHTML = "🙄";
@@ -443,19 +443,60 @@ function updateEmo(lr) {
 		if (thingie.offsetLeft > mazeWidth) {
 			emo.innerHTML = "";
 			home.innerHTML = "🥳";
-		}
-		prevl = thingie.offsetLeft;
+			const audio = new Audio('som.mp3');
+			audio.play();
+			if (!localStorage.getItem("botaoCriado")) {
+				// Cria um botão
+				var botao = document.createElement("button");
+				botao.innerHTML = "Clique aqui";
+				botao.id = "meu-botao";
+			  
+				// Adiciona o botão ao div
+				var div = document.getElementById("container");
+				div.appendChild(botao);
+			  
+				// Armazena um valor em localStorage para indicar que o botão foi criado
+				localStorage.setItem("botaoCriado", true);
+			  
+				// Chama a função que adiciona o evento de clique após o botão ser criado
+				adicionarEventoClique();
+			  } else {
+				// Se o botão já foi criado, adiciona o evento de clique imediatamente
+				adicionarEventoClique();
+			  }
+			  
+			  // Função que adiciona o evento de clique ao botão
+			  function adicionarEventoClique() {
+				var meuBotao = document.getElementById("meu-botao");
+				if (meuBotao) {
+				  meuBotao.addEventListener("click", function() {
+					alert("Botão clicado!");
+					prevl = thingie.offsetLeft;
+				  });
+				}
+			  }
+			}
+
+		
+	
+
+
+
+
+
+		
+		
 	} else {
 		if (thingie.offsetLeft > (mazeWidth - step) && thingie.offsetTop === home.offsetTop) {
 			emo.innerHTML = "🤗";
-		}else{
-			if(thingie.offsetLeft > (mazeWidth - step) && thingie.offsetTop != home.offsetTo){
+		} else {
+			if (thingie.offsetLeft > (mazeWidth - step) && thingie.offsetTop != home.offsetTo) {
 				emo.innerHTML = "🙄";
 			}
 		}
 	}
 
-	
+
 }
 
 
@@ -469,7 +510,7 @@ function tiltTimer() {
 }
 
 function handleOrientation(e) {
-	
+
 
 	if (firstMove) {
 		lastUD = e.beta;
@@ -528,7 +569,7 @@ function updateStatus() {
 	}
 
 	for (let i = 0; i < gp[0].buttons.length; i++) {
-		
+
 		if (gp[0].buttons[12].pressed) {
 			if (allowU) {
 				up();
@@ -539,7 +580,7 @@ function updateStatus() {
 			allowU = true;
 		}
 
-		
+
 		if (gp[0].buttons[13].pressed) {
 			if (allowD) {
 				down();
@@ -550,7 +591,7 @@ function updateStatus() {
 			allowD = true;
 		}
 
-		
+
 		if (gp[0].buttons[14].pressed) {
 			if (allowL) {
 				left();
@@ -561,7 +602,7 @@ function updateStatus() {
 			allowL = true;
 		}
 
-		
+
 		if (gp[0].buttons[15].pressed) {
 			if (allowR) {
 				right();
@@ -574,7 +615,7 @@ function updateStatus() {
 	}
 
 	for (let j = 0; j < gp[0].axes.length; j++) {
-		
+
 		if (gp[0].axes[1] < -0.8 || gp[0].axes[3] < -0.8) {
 			if (allowAU) {
 				up();
@@ -608,8 +649,8 @@ function scangamepads() {
 	var gamepads = navigator.getGamepads
 		? navigator.getGamepads()
 		: navigator.webkitGetGamepads
-		? navigator.webkitGetGamepads()
-		: [];
+			? navigator.webkitGetGamepads()
+			: [];
 	for (var i = 0; i < gamepads.length; i++) {
 		if (gamepads[i]) {
 			if (gamepads[i].index in gp) {
@@ -691,7 +732,7 @@ cont.addEventListener("touchstart", (e) => {
 
 cont.addEventListener("touchmove", (e) => {
 	e.preventDefault();
-	
+
 	let diffY = e.changedTouches[0].pageY - lasttouchpY;
 	let diffX = e.changedTouches[0].pageX - lasttouchpX;
 	if (diffY > sThreshold) {
@@ -718,9 +759,9 @@ cont.addEventListener("touchmove", (e) => {
 let lastscrollpY = 0;
 let lastscrollpX = 0;
 cont.addEventListener("wheel", (e) => {
-	
 
-	
+
+
 	lastscrollpY = lastscrollpY + e.deltaY;
 	if (lastscrollpY > 0 && e.deltaY < 0) {
 		lastscrollpY = 0;
@@ -733,12 +774,12 @@ cont.addEventListener("wheel", (e) => {
 		up();
 		lastscrollpY = 0;
 	}
-		if (lastscrollpY < (-1 * scThreshold)) {
+	if (lastscrollpY < (-1 * scThreshold)) {
 		down();
 		lastscrollpY = 0;
 	}
-	
-	
+
+
 	lastscrollpX = lastscrollpX + e.deltaX;
 	if (lastscrollpX > 0 && e.deltaX < 0) {
 		lastscrollpX = 0;
@@ -751,7 +792,7 @@ cont.addEventListener("wheel", (e) => {
 		left();
 		lastscrollpX = 0;
 	}
-		if (lastscrollpX < (-1 * scThreshold)) {
+	if (lastscrollpX < (-1 * scThreshold)) {
 		right();
 		lastscrollpX = 0;
 	}
